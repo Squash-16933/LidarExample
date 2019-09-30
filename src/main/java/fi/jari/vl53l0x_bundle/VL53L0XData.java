@@ -63,7 +63,7 @@ public class VL53L0XData implements Runnable {
 				int mm = sensor.range();
 				if (previousDist != mm) {
 					System.out.println(String.format("Distance: %d mm", mm));
-					if (mm > 60 && mm < 200 && mm != 0) {
+					if (mm >= 60 && mm <= 200 && mm != 0) {
 						led.setState(PinState.HIGH);
 						if (!recording) {
 							record();
