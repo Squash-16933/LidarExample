@@ -9,13 +9,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pi4j.io.gpio.GpioController;
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.RaspiBcmPin;
-import com.pi4j.io.gpio.RaspiGpioProvider;
-import com.pi4j.io.gpio.RaspiPinNumberingScheme;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 
@@ -27,8 +20,6 @@ public class VL53L0XData implements Runnable {
 
 	private boolean running = true;
 	private boolean recording = false;
-	private GpioController gpio;
-	private GpioPinDigitalOutput led;
 	private long recordTime = 10000;
 	private Instant recordingStarted;
 
@@ -42,11 +33,7 @@ public class VL53L0XData implements Runnable {
 
 	@Override
 	public void run() {
-		GpioFactory.setDefaultProvider(new RaspiGpioProvider(RaspiPinNumberingScheme.BROADCOM_PIN_NUMBERING));
-		gpio = GpioFactory.getInstance();
-		if (led == null) {
-			led = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_22, "LED-light");
-		}
+
 //		I2CBus bus = null;
 		VL53L0XDevice sensor = null;
 		try {
@@ -64,7 +51,6 @@ public class VL53L0XData implements Runnable {
 				if (previousDist != mm) {
 					System.out.println(String.format("Distance: %d mm", mm));
 					if (mm >= 60 && mm <= 200 && mm != 0) {
-						led.setState(PinState.HIGH);
 						if (!recording) {
 							record();
 						}
@@ -72,7 +58,6 @@ public class VL53L0XData implements Runnable {
 						if (recording) {
 							stopRecordAndPack();
 						}
-						led.setState(PinState.LOW);
 					}
 				}
 				previousDist = mm;
@@ -134,12 +119,10 @@ public class VL53L0XData implements Runnable {
 		for (Integer address : addresses) {
 			devices.add(bus.getDevice(address));
 		}
-
 		System.out.println(devices);
 		I2CDevice test = devices.get(0);
 		System.out.println(test.read());
 		test.write((byte) 11, (byte) 1);
-
 	}
 
 	public void stop() {

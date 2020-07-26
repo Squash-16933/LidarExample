@@ -1,0 +1,10 @@
+fi/jari/vl53l0x_bundle/VL53L0XData.class
+fi/jari/vl53l0x_bundle/EndianReaders.class
+fi/jari/vl53l0x_bundle/SequenceStepTimeouts.class
+fi/jari/vl53l0x_bundle/Activator.class
+fi/jari/vl53l0x_bundle/EndianReaders$Endianness.class
+fi/jari/vl53l0x_bundle/VL53L0XDevice$1.class
+fi/jari/vl53l0x_bundle/VL53L0XDevice$SPADInfo.class
+fi/jari/vl53l0x_bundle/VL53L0XDevice.class
+fi/jari/vl53l0x_bundle/SequenceStep.class
+fi/jari/vl53l0x_bundle/Driver.class

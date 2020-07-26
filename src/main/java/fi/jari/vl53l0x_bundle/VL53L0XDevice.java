@@ -117,7 +117,6 @@ public class VL53L0XDevice {
 
 	public VL53L0XDevice(int address, int timeout) throws IOException, I2CFactory.UnsupportedBusNumberException {
 		this.ioTimeout = timeout;
-
 		// Get i2c bus
 		bus = I2CFactory.getInstance(I2CBus.BUS_1); // Depends on the RasPi version
 		if (verbose) {
@@ -133,7 +132,6 @@ public class VL53L0XDevice {
 		if (this.readU8(0xC0) != 0xEE || this.readU8(0xC1) != 0xAA || this.readU8(0xC2) != 0x10) {
 			throw new RuntimeException("Failed to find expected ID register values. Check wiring!");
 		}
-
 		writeAllBytes();
 
 		if (verbose) {
@@ -155,7 +153,6 @@ public class VL53L0XDevice {
 		vl53l0x.write((byte) 0x00, (byte) 0x01);
 		vl53l0x.write((byte) 0xFF, (byte) 0x00);
 		vl53l0x.write((byte) 0x80, (byte) 0x00);
-
 		// disable SIGNAL_RATE_MSRC (bit 1) and SIGNAL_RATE_PRE_RANGE (bit 4) limit
 		// checks
 		configControl = readU8(MSRC_CONFIG_CONTROL) | 0x12;
@@ -163,7 +160,6 @@ public class VL53L0XDevice {
 		// set final range signal rate limit to 0.25 MCPS (million counts per second)
 		signalRateLimit = 0.25f;
 		vl53l0x.write((byte) SYSTEM_SEQUENCE_CONFIG, (byte) 0xFF);
-
 		SPADInfo spadInfo = getSpadInfo();
 		// The SPAD map (RefGoodSpadMap) is read by VL53L0X_get_info_from_device() in
 		// the API, but the same data seems to
@@ -171,11 +167,9 @@ public class VL53L0XDevice {
 		// read it from there.
 		byte[] refSpadMap = new byte[7];
 		refSpadMap[0] = (byte) GLOBAL_CONFIG_SPAD_ENABLES_REF_0;
-
 		vl53l0x.write(refSpadMap, 0, 1);
 //		self._device.readinto(ref_spad_map, start=1)
 		vl53l0x.read(refSpadMap, 1, 6); // TODO Verify
-
 		vl53l0x.write((byte) 0xFF, (byte) 0x01);
 		vl53l0x.write((byte) DYNAMIC_SPAD_REF_EN_START_OFFSET, (byte) 0x00);
 		vl53l0x.write((byte) DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, (byte) 0x2C);
@@ -192,9 +186,7 @@ public class VL53L0XDevice {
 				spadsEnabled += 1;
 			}
 		}
-
 		vl53l0x.write(refSpadMap);
-
 		vl53l0x.write((byte) 0xFF, (byte) 0x01);
 		vl53l0x.write((byte) 0x00, (byte) 0x00);
 		vl53l0x.write((byte) 0xFF, (byte) 0x00);
@@ -540,5 +532,4 @@ public class VL53L0XDevice {
 		this.vl53l0x.write((byte) SYSTEM_INTERRUPT_CLEAR, (byte) 0x01);
 		return rangeMm;
 	}
-
 }

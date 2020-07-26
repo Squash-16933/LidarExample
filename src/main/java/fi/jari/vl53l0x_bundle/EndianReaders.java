@@ -4,7 +4,6 @@
 package fi.jari.vl53l0x_bundle;
 
 import java.io.IOException;
-
 import com.pi4j.io.i2c.I2CDevice;
 
 /**
