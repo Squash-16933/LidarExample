@@ -1,6 +1,3 @@
-/**
- *
- */
 package fi.jari.vl53l0x_bundle;
 
 import java.io.IOException;
@@ -50,15 +47,6 @@ public class VL53L0XData implements Runnable {
 				int mm = sensor.range();
 				if (previousDist != mm) {
 					System.out.println(String.format("Distance: %d mm", mm));
-					if (mm >= 60 && mm <= 200 && mm != 0) {
-						if (!recording) {
-							record();
-						}
-					} else if (mm > 100) {
-						if (recording) {
-							stopRecordAndPack();
-						}
-					}
 				}
 				previousDist = mm;
 				try {
@@ -72,36 +60,6 @@ public class VL53L0XData implements Runnable {
 			System.out.println("Fuq");
 		}
 
-	}
-
-	private void record() {
-		recording = true;
-		ProcessBuilder pb = new ProcessBuilder("/home/jari/video/record.sh", String.valueOf(recordTime));
-		recordingStarted = Instant.now();
-		try {
-			pb.start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private void stopRecordAndPack() {
-		recording = false;
-		Instant recordingStopped = Instant.now();
-
-		while (Duration.between(recordingStarted, recordingStopped).toMillis() < recordTime) {
-			recordingStopped = Instant.now();
-			sleep(1000);
-		}
-		ProcessBuilder pb = new ProcessBuilder("/home/jari/video/pack.sh");
-		try {
-			pb.start();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	private void sleep(long time) {
