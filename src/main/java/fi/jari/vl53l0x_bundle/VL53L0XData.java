@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Copyright (C) 2020 Team Squash
  * @author Nakki
  *
  */
